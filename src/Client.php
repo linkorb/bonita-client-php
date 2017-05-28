@@ -27,7 +27,7 @@ class Client
 
 
         $response = $this->guzzle->post(
-            $this->baseUrl . '/loginservice',
+            $this->baseUrl . '/loginservice?redirect=false',
             [
                 'form_params' => [
                     'username' => $this->username,
