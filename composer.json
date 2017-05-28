@@ -15,6 +15,9 @@
         "php": ">=5.3.0",
         "guzzlehttp/guzzle": "~6.0"
     },
+    "require-dev": {
+       "symfony/dotenv": "v3.3.0-RC1"
+    },
     "autoload": {
         "psr-4": {
             "Bonita\\": "src/"

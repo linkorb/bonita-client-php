@@ -1,5 +1,7 @@
 # Created by http://www.gitignore.io
 
+.env
+
 ### Eclipse ###
 *.pydevproject
 .metadata
@@ -25,7 +27,7 @@ local.properties
 # PDT-specific
 .buildpath
 
-# sbteclipse plugin 
+# sbteclipse plugin
 .target
 
 # TeXlipse plugin
