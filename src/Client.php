@@ -12,6 +12,7 @@ class Client
     protected $password;
     protected $baseUrl;
     protected $cookieJar;
+    protected $token;
 
     public function __construct($baseUrl, $username, $password)
     {
@@ -25,7 +26,6 @@ class Client
 
         $this->guzzle = new GuzzleClient();
 
-
         $response = $this->guzzle->post(
             $this->baseUrl . '/loginservice?redirect=false',
             [
@@ -37,23 +37,55 @@ class Client
             ]
         );
 
-        //print_r($this->cookieJar);
-
-
-
-
+        // Extract the token so we can use it as a header in future non-get requests
+        foreach ($this->cookieJar->toArray() as $cookie) {
+            if ($cookie['Name']=='X-Bonita-API-Token') {
+                $this->token = $cookie['Value'];
+            }
+        }
     }
 
     public function get($url)
     {
-      $response = $this->guzzle->get(
-          $this->baseUrl . $url,
-          [
-              'cookies' => $this->cookieJar
-          ]
-      );
+        $response = $this->guzzle->get(
+            $this->baseUrl . $url,
+            [
+                'cookies' => $this->cookieJar
+            ]
+        );
 
-      return $response->getBody();
+        return $response->getBody();
+    }
+
+    public function put($url, $data)
+    {
+        $response = $this->guzzle->put(
+            $this->baseUrl . $url,
+            [
+                'json' => $data,
+                'cookies' => $this->cookieJar,
+                'headers' => [
+                  'X-Bonita-API-Token' => $this->token
+                ]
+            ]
+        );
+
+        return $response->getBody();
+    }
+
+    public function post($url)
+    {
+        $response = $this->guzzle->post(
+            $this->baseUrl . $url,
+            [
+                'json' => $data,
+                'cookies' => $this->cookieJar,
+                'headers' => [
+                  'X-Bonita-API-Token' => $this->token
+                ]
+            ]
+        );
+        return $response->getBody();
     }
 
     public function getOrganizationGroups()
